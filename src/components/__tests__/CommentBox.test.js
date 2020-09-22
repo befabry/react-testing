@@ -19,9 +19,28 @@ it("has a text area and a button", () => {
   expect(wrapped.find("button").length).toEqual(1);
 });
 
-it("has a text area that users can type in", () => {
-  //JS / DOM event, not React
-  wrapped.find("textarea").simulate("change", {
-    target: { value: "new comment" }, //Mock. Make sure we receive the event.target.value with this text
+//group it block together
+describe("The text area", () => {
+  //Executed in this block only
+  beforeEach(() => {
+    //JS / DOM event, not React
+    wrapped.find("textarea").simulate("change", {
+      target: { value: "new comment" }, //Mock. Make sure we receive the event.target.value with this text
+    });
+    //Force the component to rerender. (Render is asynchronous)
+    wrapped.update();
+  });
+
+  it("has a text area that users can type in", () => {
+    expect(wrapped.find("textarea").prop("value")).toEqual("new comment");
+  });
+
+  it("empties the textarea after submitting", () => {
+    expect(wrapped.find("textarea").prop("value")).toEqual("new comment");
+
+    wrapped.find("form").simulate("submit");
+    wrapped.update();
+
+    expect(wrapped.find("textarea").prop("value")).toEqual("");
   });
 });

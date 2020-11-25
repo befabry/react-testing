@@ -3,8 +3,10 @@ import { connect } from "react-redux";
 
 class CommentList extends Component {
   renderComments() {
-    return this.props.comments.map((comment) => {
-      return <li key={comment}>{comment}</li>;
+    return this.props.comments.map((comment, index) => {
+      //Concatenate the comment + index, there's duplicate on the list
+      //Wouldn't have done it in prod, it's just a toy project
+      return <li key={comment + index}>{comment}</li>;
     });
   }
 

@@ -1,7 +1,7 @@
 //It's how middleware are built with Redux. Arbitrary decision.
 
 //Equivalent to below
-export default ({ dispatch }) => (next) => (action) => {
+export default ({ dispatch }) => (next) => async (action) => {
   //Check if it has a promise.
   //If not, send to next.
   if (!action.payload || !action.payload.then) {
@@ -9,6 +9,11 @@ export default ({ dispatch }) => (next) => (action) => {
   }
 
   //If it does, resolve the promise
+  //Then create a new action with the data and dispatch it
+  //We send it back to the begining of the dispatch
+  const response = await action.payload;
+  const newAction = { ...action, payload: response };
+  dispatch(newAction);
 };
 
 // // Each function is called with a different set of objects. Boilerplate for middleware
